@@ -4,6 +4,13 @@ A Wordle board holds a matrix of tiles.
 
 """
 
+# Size of Puzzle
+from wordle_config import NGUESSES, NWORDLEN 
+
+# Choices is the alphabet, unknown for a tile without a letter is '.'
+from wordle_config import CHOICES, UNKNOWN
+
+
 class Board():
 
     def __init__(self, r_num, c_num):
@@ -48,8 +55,12 @@ class Tile:
 
 
 def main():
+    # checking if import works
+    print(CHOICES, NGUESSES)
+
     x = Tile(1, 2, 'f', 'yellow')
     print(x)
+    
 
     y = Board(3, 4)
     y.print_board()
