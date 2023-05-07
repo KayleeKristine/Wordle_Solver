@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 """
 A Wordle board holds a matrix of tiles.
 
@@ -9,6 +8,31 @@ from wordle_config import NGUESSES, NWORDLEN
 
 # Choices is the alphabet, unknown for a tile without a letter is '.'
 from wordle_config import CHOICES, UNKNOWN
+
+
+
+"""
+Keep track of choices for each col and eliminate
+while taking in guesses
+
+Need to keep track of
+    if letter not in word (grey)
+        - remove letter from choices for each col
+    if letter in word but wrong position (yellow)
+        - remove letter from choices within current col
+    if letter in word and current position (green)
+        - Choices for current col = letter
+
+Need to figure out:
+    - should above be in a new class, added to class Board, or not a class at all?
+    - where should choices for each column be stored
+
+Target word
+    - should be random word from text file
+    - where should this be stored?
+    - how to keep track across files?
+"""
+
 
 
 class Board():
@@ -26,7 +50,6 @@ class Board():
             self.board.append(cols)
 
 
-
     def print_board(self):
         
         print(f'*** Wordle Game Board ***')
@@ -39,18 +62,8 @@ class Board():
                 letters = letters + tile.letter
 
             print(f'{letters}')
-            
 
-
-        """
-        for i in range(NGUESSES):
-            
-            for j in range(NWORDLEN):
-                
-                print(f'{self.board[i][j].letter}'.strip())
-        """ 
         
-
 
 class Tile:
 
@@ -82,6 +95,5 @@ def main():
     y.print_board()
 
 
-
-main()
-
+if __name__=="__main__":
+    main()
