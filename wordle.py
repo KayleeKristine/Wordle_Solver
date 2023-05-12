@@ -3,7 +3,7 @@ simple wordle game
 """
 
 import wordle_gboard as wgb
-from wordle_config import NWORDLEN, NGUESSES
+from wordle_config import NWORDLEN, NGUESSES, DICTION
 
 def main():
     # test import
@@ -28,17 +28,22 @@ def main():
         # ask user for guess
         while invalid_guess:
             guess = input("guess a word: ")
-            print(type(guess))
             print(f'word guessed: {guess}')
 
+
             # check if guess valid
-            if len(guess) != NWORDLEN:
-                print(f'word must be of length {NWORDLEN}')
-            else:
-                invalid_guess = False
-                counter += 1
+            # check if guess is correct length
+            if len(guess) == NWORDLEN:
+
+                # check if guess within dictionary
+                if guess in DICTION:
+                    invalid_guess = False
             
-            # check if guess within dictionary
+                    counter += 1
+                else:
+                    print(f'invalid word. not found in dictionary')
+            else:
+                print(f'word must be of length {NWORDLEN}')
             
 
         # add guess to board
