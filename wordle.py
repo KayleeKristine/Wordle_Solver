@@ -14,12 +14,12 @@ def main():
     # pick target word
     # randomize? for now just assign
     
-    target = random.choice(DICTION)
-    print(f'Goal: {target}')
-    #target = "wants"
+#    target = random.choice(DICTION)
+#    print(f'Goal: {target}')
+    target = "attic"
     
-    lgreen = []
-    lyellow = []
+    lgreen = [[] for x in range(NWORDLEN)]
+    lyellow = [[] for x in range(NWORDLEN)]
     lgrey = []
 
     correct_guess = False
@@ -63,21 +63,21 @@ def main():
             
                 # if letter in correct position and within target
                 if i == j and gletter is target[j]:
-                        if gletter not in lgreen:
+                        if gletter not in lgreen[i]:
                             
                             # color green
-                            lgreen.append(gletter)
+                            lgreen[i].append(gletter)
                 
                 # if letter in target but incorrect position
                 if i != j and gletter is target[j]:
-                    if gletter not in lyellow:
+                    if gletter not in lyellow[i]:
 
                         # color yellow
-                        lyellow.append(gletter)
+                        lyellow[i].append(gletter)
             
             # if letter not within word
-            if gletter not in lgreen:
-                if gletter not in lyellow:
+            if gletter not in lgreen[i]:
+                if gletter not in lyellow[i]:
                     if gletter not in lgrey:
 
                         # color grey
