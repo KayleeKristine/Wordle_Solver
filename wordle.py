@@ -2,6 +2,7 @@
 simple wordle game
 """
 
+import random
 import wordle_gboard as wgb
 from wordle_config import NWORDLEN, NGUESSES, DICTION
 
@@ -12,7 +13,10 @@ def main():
 
     # pick target word
     # randomize? for now just assign
-    target = "wants"
+    
+    target = random.choice(DICTION)
+    print(f'Goal: {target}')
+    #target = "wants"
     
     lgreen = []
     lyellow = []
