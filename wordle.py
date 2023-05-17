@@ -7,30 +7,33 @@ import wordle_gboard as wgb
 from wordle_config import NWORDLEN, NGUESSES, DICTION, TARGET
 
 def main():
-    # test import
+    
+    # create game board
     b = wgb.Board()
     b.print_board()
 
-    # pick target word
-    # randomize? for now just assign
-    
-#    target = random.choice(DICTION)
-#    target = "attic"
+    # print TARGET word for debugging purpose
     print(f'Goal: {TARGET}')
     
+    # list of letters for each color assignment
     lgreen = [[] for x in range(NWORDLEN)]
     lyellow = [[] for x in range(NWORDLEN)]
     lgrey = []
 
+    # initializing trackers for length of game
     correct_guess = False
     counter = 0
+
     # while remaining guess available or guesses target
     while not correct_guess:
         
+        # initialize
         invalid_guess = True
         
-        # ask user for guess
+        # ask user for a valid guess
         while invalid_guess:
+
+            # ask user for guess
             guess = input("guess a word: ")
             guess = guess.lower()
             print(f'word guessed: {guess}')
@@ -43,7 +46,6 @@ def main():
                 # check if guess within dictionary
                 if guess in DICTION:
                     invalid_guess = False
-            
                     counter += 1
                 else:
                     print(f'invalid word. not found in dictionary')
@@ -56,53 +58,55 @@ def main():
         # find corresponding colors
         for i in range(NWORDLEN):
             #print(f'{guess[i]}')
-            gletter = guess[i]
-            
+            glet = guess[i]
 
             for j in range(NWORDLEN):
                 #print(f'{target[j]}')
                 
                 # if letter in correct position and within target
-                if i == j and gletter is TARGET[j]:
+                if i == j and glet is TARGET[j]:
                         #if gletter not in lgreen[i]:
                             
                             # color green
-                            lgreen[i].append(gletter)
+                            lgreen[i].append(glet)
 
-                            # set tile to row = counter, col = i, letter = gletter, color = green
-                            b.set_tile(counter - 1, i, gletter, 'green')
+                            # set tile to row = counter, col = i, letter = glet, color = green
+                            b.set_tile(counter - 1, i, glet, 'green')
                 
                 # if letter in target but incorrect position
-                if i != j and gletter is TARGET[j]:
+                if i != j and glet is TARGET[j]:
                     #if gletter not in lyellow[i]:
 
                         # color yellow
-                        lyellow[i].append(gletter)
+                        lyellow[i].append(glet)
 
                         # set tile to row = counter, col = i, letter = gletter, color = yellow
-                        b.set_tile(counter - 1, i, gletter, 'yellow')
+                        b.set_tile(counter - 1, i, glet, 'yellow')
                 
 
             # if letter not within word
-            if gletter not in lgreen[i]:
-                if gletter not in lyellow[i]:
-                    #if gletter not in lgrey:
+            if glet not in lgreen[i]:
+                if glet not in lyellow[i]:
+                    #if glet not in lgrey:
 
                     # color grey
-                    lgrey.append(gletter)
+                    lgrey.append(glet)
         
                     # set tile to row = counter, col = i, letter = gletter, color = grey 
-                    b.set_tile(counter - 1, i, gletter, 'grey')
+                    b.set_tile(counter - 1, i, glet, 'grey')
                 
         print(f'green: {lgreen}\nyellow: {lyellow}\ngrey: {lgrey}')
+        
         # display board
         b.print_board()
 
+        # if the guess is the same as target word
         if guess == TARGET:
             print(f'You Win!')
             correct_guess = True
 
-        if counter == 5:
+        # if reached max guesses
+        if counter == NGUESSES:
             print(f'Out of guesses. The word was {TARGET}')
             break
             

@@ -21,5 +21,5 @@ with open("word_dictionary/wordlist_five.txt", 'r') as fp:
         if not line.isspace():
             DICTION.append(line.strip())
 
-TARGET = random.choice(DICTION)
-#TARGET = 'attic'
+#TARGET = random.choice(DICTION)
+TARGET = 'attic'
