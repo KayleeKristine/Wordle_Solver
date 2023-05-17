@@ -2,9 +2,9 @@
 simple wordle game
 """
 
-import random
+#import random
 import wordle_gboard as wgb
-from wordle_config import NWORDLEN, NGUESSES, DICTION
+from wordle_config import NWORDLEN, NGUESSES, DICTION, TARGET
 
 def main():
     # test import
@@ -15,8 +15,8 @@ def main():
     # randomize? for now just assign
     
 #    target = random.choice(DICTION)
-    target = "attic"
-    print(f'Goal: {target}')
+#    target = "attic"
+    print(f'Goal: {TARGET}')
     
     lgreen = [[] for x in range(NWORDLEN)]
     lyellow = [[] for x in range(NWORDLEN)]
@@ -53,8 +53,7 @@ def main():
 
         # add guess to board
         
-        
-        # add corresponding colors
+        # find corresponding colors
         for i in range(NWORDLEN):
             #print(f'{guess[i]}')
             gletter = guess[i]
@@ -64,8 +63,8 @@ def main():
                 #print(f'{target[j]}')
                 
                 # if letter in correct position and within target
-                if i == j and gletter is target[j]:
-                        if gletter not in lgreen[i]:
+                if i == j and gletter is TARGET[j]:
+                        #if gletter not in lgreen[i]:
                             
                             # color green
                             lgreen[i].append(gletter)
@@ -74,37 +73,37 @@ def main():
                             b.set_tile(counter - 1, i, gletter, 'green')
                 
                 # if letter in target but incorrect position
-                if i != j and gletter is target[j]:
-                    if gletter not in lyellow[i]:
+                if i != j and gletter is TARGET[j]:
+                    #if gletter not in lyellow[i]:
 
                         # color yellow
                         lyellow[i].append(gletter)
 
-                        # set tile to row = counter, col = i, letter = gletter, color = green
+                        # set tile to row = counter, col = i, letter = gletter, color = yellow
                         b.set_tile(counter - 1, i, gletter, 'yellow')
                 
 
             # if letter not within word
             if gletter not in lgreen[i]:
                 if gletter not in lyellow[i]:
-                    if gletter not in lgrey:
+                    #if gletter not in lgrey:
 
-                        # color grey
-                        lgrey.append(gletter)
+                    # color grey
+                    lgrey.append(gletter)
         
-                        # set tile to row = counter, col = i, letter = gletter, color = green 
-                        b.set_tile(counter - 1, i, gletter, 'grey')
+                    # set tile to row = counter, col = i, letter = gletter, color = grey 
+                    b.set_tile(counter - 1, i, gletter, 'grey')
                 
         print(f'green: {lgreen}\nyellow: {lyellow}\ngrey: {lgrey}')
-        #print board
+        # display board
         b.print_board()
 
-        if guess == target:
+        if guess == TARGET:
             print(f'You Win!')
             correct_guess = True
 
         if counter == 5:
-            print(f'Out of guesses. The word was {target}')
+            print(f'Out of guesses. The word was {TARGET}')
             break
             
 

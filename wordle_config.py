@@ -3,6 +3,7 @@ Configurations
 
 Control variations of the game Wordle
 """
+import random
 
 # number of guesses
 NGUESSES = 5
@@ -19,3 +20,6 @@ with open("word_dictionary/wordlist_five.txt", 'r') as fp:
     for num, line in enumerate(fp):
         if not line.isspace():
             DICTION.append(line.strip())
+
+TARGET = random.choice(DICTION)
+#TARGET = 'attic'
