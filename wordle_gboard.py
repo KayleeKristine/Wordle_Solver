@@ -40,28 +40,34 @@ class Board():
     def __init__(self):
         # number of rows = number of guesses
         # number of cols = number of letters within valid word
-        self.board = []
-        self.groups = []
+        self.tiles = []
+        #self.groups = []
 
         for row in range(NGUESSES):
             cols = []
             for col in range(NWORDLEN):
                 cols.append(Tile(row, col))
-            self.board.append(cols)
+            self.tiles.append(cols)
 
 
     def print_board(self):
         
         print(f'*** Wordle Game Board ***')
         
-        for row in self.board:
+        for row in self.tiles:
             #letters = [tile.letter for tile in row]
-            letters = ""
+            values = ""
             for tile in row:
                 #print(f'{tile.letter}')
-                letters = letters + tile.letter
+                values = values + tile.letter.upper() + ': ' + tile.color + ' '
 
-            print(f'{letters}')
+            print(f'{values}')
+
+    def set_tile(self, row_num, col_num, letter, color):
+        # fill row with letters from inputed word in indicated row number
+        
+        tile = self.tiles[row_num][col_num]
+        tile.set_value(letter, color)
 
         
 
@@ -72,6 +78,10 @@ class Tile:
         self.col = col
         self.letter = letter
         self.color = color
+
+    def set_value(self, l='.' , c='grey'):
+        self.color = c
+        self.letter = l
 
     def __str__(self):
         return f'Tile: {self.letter} {self.color}'
