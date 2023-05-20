@@ -11,6 +11,7 @@ def main():
     # create game board
     b = wgb.Board()
     b.print_board()
+    b.print_choices()
 
     # print TARGET word for debugging purpose
     print(f'Goal: {TARGET}')
@@ -72,9 +73,11 @@ def main():
 
                             # set tile to row = counter, col = i, letter = glet, color = green
                             b.set_tile(counter - 1, i, glet, 'green')
+                            b.update_choices(i, glet, 'green')
                 
                 # if letter in target but incorrect position
                 if i != j and glet is TARGET[j]:
+                    if glet not in lgreen[i]:
                     #if gletter not in lyellow[i]:
 
                         # color yellow
@@ -82,8 +85,10 @@ def main():
 
                         # set tile to row = counter, col = i, letter = gletter, color = yellow
                         b.set_tile(counter - 1, i, glet, 'yellow')
-                
-
+                        b.update_choices(i, glet, 'yellow')
+                        if glet.upper() not in b.yellows:
+                            b.yellows.append(glet.upper())
+            
             # if letter not within word
             if glet not in lgreen[i]:
                 if glet not in lyellow[i]:
@@ -94,9 +99,10 @@ def main():
         
                     # set tile to row = counter, col = i, letter = gletter, color = grey 
                     b.set_tile(counter - 1, i, glet, 'grey')
+                    b.update_choices(i, glet, 'grey')
                 
         print(f'green: {lgreen}\nyellow: {lyellow}\ngrey: {lgrey}')
-        
+        b.print_choices() 
         # display board
         b.print_board()
 

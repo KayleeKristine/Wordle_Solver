@@ -42,6 +42,8 @@ class Board():
         # number of cols = number of letters within valid word
         self.tiles = []
         #self.groups = []
+        self.choices = [CHOICES for i in range(NWORDLEN)]
+        self.yellows = []
 
         for row in range(NGUESSES):
             cols = []
@@ -69,7 +71,66 @@ class Board():
         tile = self.tiles[row_num][col_num]
         tile.set_value(letter, color)
 
+
+    def print_choices(self):
+        # print out possible choices for letters of each position of word
+        for i in range(NWORDLEN):
+            print(self.choices[i])
+
+        print(self.yellows)
+
+    def update_choices(self, pos, letter, color):
+
+        print(f'Entering update_choices()')
         
+        updated_choices = ''
+        up_letter = letter.upper()
+        print(f'letter in question: {up_letter}')
+        
+        # letter in word but wrong position
+        # remove choice for current position
+        if color == 'yellow':
+            print(f'color is yellow')
+
+            print(f'previous options: {self.choices[pos]}')
+            if up_letter in self.choices[pos]:
+                print(f'{letter.upper()} is within choices')
+
+                updated_choices = self.choices[pos].replace(up_letter, '-')
+                
+                self.choices[pos] = updated_choices
+                print(f'updated choices to: {self.choices[pos]} ')
+        
+        # letter in word and correct position
+        # only choice is the letter
+        elif color == 'green':
+      
+            print(f'color is green')
+
+            print(f'previous options: {self.choices[pos]}')
+            self.choices[pos] = up_letter
+
+            print(f'updated choices to: {self.choices[pos]} ')
+
+        
+        # letter no within word
+        # remove choice from all positions
+        elif color == 'grey':
+           
+            print(f'color is grey')
+
+            print(f'previous options:')
+            self.print_choices()
+
+            for i in range(NWORDLEN):
+                if up_letter in self.choices[i]:
+                    updated_choices = self.choices[i].replace(up_letter, '-')
+                    self.choices[i] = updated_choices
+
+            print(f'updated options:')
+            self.print_choices()
+        
+        print(f'Exiting update_choices()')
 
 class Tile:
 
