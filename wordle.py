@@ -11,17 +11,16 @@ def main():
     # create game board
     b = wgb.Board()
     b.print_board()
-    b.print_choices()
+    #b.print_choices()
 
     # print TARGET word for debugging purpose
     print(f'Goal: {TARGET}')
-    
 
     # initializing trackers for length of game
     correct_guess = False
     counter = 0
 
-    # while remaining guess available or guesses target
+    # while remaining guess available or if target is guessed
     while not correct_guess:
         
         # initialize
@@ -56,13 +55,16 @@ def main():
         for i in range(NWORDLEN):
             #print(f'{guess[i]}')
             glet = guess[i]
+            print(f'\nProcessing - {glet} - position: {i}')
 
             for j in range(NWORDLEN):
                 #print(f'{target[j]}')
+                print(f'comparing with - {TARGET[j]} - position: {j}')
                 
                 # if letter in correct position and within target
                 if i == j and glet is TARGET[j]:
-                    
+                    print(f'letter and position match')
+
                     # color green
                     b.greens[i].append(glet)
 
@@ -74,9 +76,11 @@ def main():
             
                 # if letter in target but incorrect position
                 if i != j and glet is TARGET[j]:
+                    print(f'letter match, position incorrect')
                     
                     # If glet is in green, already know where the correct position is 
                     if glet not in b.greens[i]:
+                        
                         
                         # If already in yellow, no need to update
                         if glet not in b.yellows[i]:
@@ -84,16 +88,20 @@ def main():
                             # color yellow
                             b.yellows[i].append(glet)
                             
-                            # create Tile for board
-                            b.set_tile(counter - 1, i, glet, 'yellow')
-                            
                             # Update options
                             b.update_choices(i, glet, 'yellow')
+                        
+                        # create Tile for board
+                        b.set_tile(counter - 1, i, glet, 'yellow')
+                            
 
 
             # if letter not within word
+            print(f'Checking if grey by default')
             if glet not in b.greens[i]:
+                print(f'not within greens in position {i}')
                 if glet not in b.yellows[i]:
+                    print(f'not within yellows in position {i}')
 
                     # color grey
                     b.greys.append(glet)
