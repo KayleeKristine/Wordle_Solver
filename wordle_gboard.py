@@ -43,7 +43,9 @@ class Board():
         self.tiles = []
         #self.groups = []
         self.choices = [CHOICES for i in range(NWORDLEN)]
-        self.yellows = []
+        self.yellows = [[] for i in range(NWORDLEN)]
+        self.greens = [[] for i in range(NWORDLEN)]
+        self.greys = []
 
         for row in range(NGUESSES):
             cols = []
@@ -74,9 +76,11 @@ class Board():
 
     def print_choices(self):
         # print out possible choices for letters of each position of word
+        print("\n*** Possible Letters for Each Position ***")
         for i in range(NWORDLEN):
             print(self.choices[i])
 
+        print("\n*** Yellow Letters ***")
         print(self.yellows)
 
     def update_choices(self, pos, letter, color):

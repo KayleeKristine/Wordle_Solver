@@ -16,10 +16,6 @@ def main():
     # print TARGET word for debugging purpose
     print(f'Goal: {TARGET}')
     
-    # list of letters for each color assignment
-    lgreen = [[] for x in range(NWORDLEN)]
-    lyellow = [[] for x in range(NWORDLEN)]
-    lgrey = []
 
     # initializing trackers for length of game
     correct_guess = False
@@ -66,43 +62,51 @@ def main():
                 
                 # if letter in correct position and within target
                 if i == j and glet is TARGET[j]:
-                        #if gletter not in lgreen[i]:
-                            
-                            # color green
-                            lgreen[i].append(glet)
+                    
+                    # color green
+                    b.greens[i].append(glet)
 
-                            # set tile to row = counter, col = i, letter = glet, color = green
-                            b.set_tile(counter - 1, i, glet, 'green')
-                            b.update_choices(i, glet, 'green')
-                
+                    # Set Tile
+                    b.set_tile(counter - 1, i, glet, 'green')
+                    
+                    # update options
+                    b.update_choices(i, glet, 'green')
+            
                 # if letter in target but incorrect position
                 if i != j and glet is TARGET[j]:
-                    if glet not in lgreen[i]:
-                    #if gletter not in lyellow[i]:
+                    
+                    # If glet is in green, already know where the correct position is 
+                    if glet not in b.greens[i]:
+                        
+                        # If already in yellow, no need to update
+                        if glet not in b.yellows[i]:
+                            
+                            # color yellow
+                            b.yellows[i].append(glet)
+                            
+                            # create Tile for board
+                            b.set_tile(counter - 1, i, glet, 'yellow')
+                            
+                            # Update options
+                            b.update_choices(i, glet, 'yellow')
 
-                        # color yellow
-                        lyellow[i].append(glet)
 
-                        # set tile to row = counter, col = i, letter = gletter, color = yellow
-                        b.set_tile(counter - 1, i, glet, 'yellow')
-                        b.update_choices(i, glet, 'yellow')
-                        if glet.upper() not in b.yellows:
-                            b.yellows.append(glet.upper())
-            
             # if letter not within word
-            if glet not in lgreen[i]:
-                if glet not in lyellow[i]:
-                    #if glet not in lgrey:
+            if glet not in b.greens[i]:
+                if glet not in b.yellows[i]:
 
                     # color grey
-                    lgrey.append(glet)
+                    b.greys.append(glet)
         
-                    # set tile to row = counter, col = i, letter = gletter, color = grey 
+                    # set Tile
                     b.set_tile(counter - 1, i, glet, 'grey')
+                    
+                    # update options
                     b.update_choices(i, glet, 'grey')
                 
-        print(f'green: {lgreen}\nyellow: {lyellow}\ngrey: {lgrey}')
+        # display options
         b.print_choices() 
+        
         # display board
         b.print_board()
 
