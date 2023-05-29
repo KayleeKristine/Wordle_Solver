@@ -43,8 +43,8 @@ class Board():
         # number of rows = number of guesses
         # number of cols = number of letters within valid word
         self.tiles = []
-        #self.groups = []
         self.choices = [CHOICES for i in range(NWORDLEN)]
+        
         self.yellows = [[] for i in range(NWORDLEN)]
         self.greens = [[] for i in range(NWORDLEN)]
         self.greys = []
@@ -211,7 +211,7 @@ class Board():
     def update_cpdict(self, cp_dict):
 
         print(f'{self.greys}')
-        # if word has grey letter, discard
+        
         dict_length = len(cp_dict)
         print(f'length of cp_dict = {dict_length}')
         
@@ -219,10 +219,17 @@ class Board():
             word = cp_dict[i]
             
             if len(word) != 0:
+
+                # if word contains a grey letter, discard
                 if any([x in word for x in self.greys]):
                     #print(f'discarding {word}')
                     cp_dict[i] = ''
                     #print(f'cp_dict[i] = {cp_dict[i]}')
+                
+                # if word contains yellow letter in corresponding position, discard
+                for j in range(NWORDLEN):
+                    if any([x in word[j] for x in self.yellows[j]]):
+                        cp_dict[i] = ''
         
         new_cpdict = []
         for i in range(dict_length):    
@@ -264,7 +271,7 @@ class Board():
 
             # repeat until guessed or reached max guesses
             if word == TARGET:
-                print(f'You Win!')
+                print(f'You Win!\nFound target in {counter} guess')
                 correct_guess = True
 
             if counter == NGUESSES:
