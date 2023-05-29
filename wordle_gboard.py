@@ -3,11 +3,13 @@ A Wordle board holds a matrix of tiles.
 
 """
 
+import random
+
 # Size of Puzzle
-from wordle_config import NGUESSES, NWORDLEN 
+from wordle_config import NGUESSES, NWORDLEN, TARGET 
 
 # Choices is the alphabet, unknown for a tile without a letter is '.'
-from wordle_config import CHOICES, UNKNOWN
+from wordle_config import CHOICES, UNKNOWN, DICTION
 
 
 
@@ -83,20 +85,21 @@ class Board():
         print("\n*** Yellow Letters ***")
         print(self.yellows)
 
+
     def update_choices(self, pos, letter, color):
 
         print(f'Entering update_choices()')
         
         updated_choices = ''
         up_letter = letter.upper()
-        print(f'letter in question: {up_letter}')
+        #print(f'letter in question: {up_letter}')
         
         # letter in word but wrong position
         # remove choice for current position
         if color == 'yellow':
-            print(f'color is yellow')
+            #print(f'color is yellow')
 
-            print(f'previous options: {self.choices[pos]}')
+            #print(f'previous options: {self.choices[pos]}')
             if up_letter in self.choices[pos]:
                 print(f'{letter.upper()} is within choices')
 
@@ -109,9 +112,9 @@ class Board():
         # only choice is the letter
         elif color == 'green':
       
-            print(f'color is green')
+            #print(f'color is green')
 
-            print(f'previous options: {self.choices[pos]}')
+            #print(f'previous options: {self.choices[pos]}')
             self.choices[pos] = up_letter
 
             print(f'updated choices to: {self.choices[pos]} ')
@@ -121,10 +124,10 @@ class Board():
         # remove choice from all positions
         elif color == 'grey':
            
-            print(f'color is grey')
+            #print(f'color is grey')
 
-            print(f'previous options:')
-            self.print_choices()
+            #print(f'previous options:')
+            #self.print_choices()
 
             for i in range(NWORDLEN):
                 if up_letter in self.choices[i]:
@@ -135,6 +138,111 @@ class Board():
             self.print_choices()
         
         print(f'Exiting update_choices()')
+
+    
+    def update_board(self, guess, counter):
+
+        # find corresponding colors
+        for i in range(NWORDLEN):
+            #print(f'{guess[i]}')
+            glet = guess[i]
+            print(f'\nProcessing - {glet} - position: {i}')
+
+            for j in range(NWORDLEN):
+                #print(f'{target[j]}')
+                print(f'comparing with - {TARGET[j]} - position: {j}')
+                
+                # if letter in correct position and within target
+                if i == j and glet is TARGET[j]:
+                    print(f'letter and position match')
+
+                    # color green
+                    self.greens[i].append(glet)
+
+                    # Set Tile
+                    self.set_tile(counter - 1, i, glet, 'green')
+                    
+                    # update options
+                    self.update_choices(i, glet, 'green')
+            
+                # if letter in target but incorrect position
+                if i != j and glet is TARGET[j]:
+                    print(f'letter match, position incorrect')
+                    
+                    # If glet is in green, already know where the correct position is 
+                    if glet not in self.greens[i]:
+                        
+                        
+                        # If already in yellow, no need to update
+                        if glet not in self.yellows[i]:
+                            
+                            # color yellow
+                            self.yellows[i].append(glet)
+                            
+                            # Update options
+                            self.update_choices(i, glet, 'yellow')
+                        
+                        # create Tile for board
+                        self.set_tile(counter - 1, i, glet, 'yellow')
+                            
+
+
+            # if letter not within word
+            print(f'Checking if grey by default')
+            if glet not in self.greens[i]:
+                print(f'not within greens in position {i}')
+                if glet not in self.yellows[i]:
+                    print(f'not within yellows in position {i}')
+
+                    # color grey
+                    self.greys.append(glet)
+        
+                    # set Tile
+                    self.set_tile(counter - 1, i, glet, 'grey')
+                    
+                    # update options
+                    self.update_choices(i, glet, 'grey')
+
+        self.print_choices()
+        self.print_board()
+
+    def update_cpdict(self, cp_dict):
+        new_cpdict = cp_dict
+        return new_cpdict
+
+
+    def solve(self):
+        # copy dictionary
+        cp_dict = DICTION
+
+        # initialize trackers for length of games
+        correct_guess = False
+        counter = 0
+
+        while not correct_guess:
+
+            # choose word
+            word = random.choice(cp_dict)
+            counter += 1
+
+            # add word to board
+            self.update_board(word, counter)
+
+            # narrow down choices within copy of dictionary
+            cp_dict = self.update_cpdict(cp_dict)
+           
+
+            # repeat until guessed or reached max guesses
+            if word == TARGET:
+                print(f'You Win!')
+                correct_guess = True
+
+            if counter == NGUESSES:
+                print(f'Out of guesses. The word was {TARGET}')
+                break
+
+
+
 
 class Tile:
 
@@ -158,16 +266,11 @@ class Tile:
 def main():
     # checking if import works
     #print(CHOICES, NGUESSES)
-
-    x = Tile(1, 2, 'f', 'yellow')
-    print(x)
-
-    z = Tile(3, 5)
-    print(z)
+    b = Board()
+    b.solve()
     
-    
-    y = Board()
-    y.print_board()
+
+
 
 
 if __name__=="__main__":
