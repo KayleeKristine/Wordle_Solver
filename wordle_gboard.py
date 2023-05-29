@@ -195,7 +195,8 @@ class Board():
                     print(f'not within yellows in position {i}')
 
                     # color grey
-                    self.greys.append(glet)
+                    if glet not in self.greys:
+                        self.greys.append(glet)
         
                     # set Tile
                     self.set_tile(counter - 1, i, glet, 'grey')
@@ -206,8 +207,30 @@ class Board():
         self.print_choices()
         self.print_board()
 
+
     def update_cpdict(self, cp_dict):
-        new_cpdict = cp_dict
+
+        print(f'{self.greys}')
+        # if word has grey letter, discard
+        dict_length = len(cp_dict)
+        print(f'length of cp_dict = {dict_length}')
+        
+        for i in range(dict_length):
+            word = cp_dict[i]
+            
+            if len(word) != 0:
+                if any([x in word for x in self.greys]):
+                    #print(f'discarding {word}')
+                    cp_dict[i] = ''
+                    #print(f'cp_dict[i] = {cp_dict[i]}')
+        
+        new_cpdict = []
+        for i in range(dict_length):    
+            if len(cp_dict[i]) != 0:
+                new_cpdict.append(cp_dict[i])
+                
+        print(new_cpdict)
+        print(f'length of update dictionary = {len(new_cpdict)}')
         return new_cpdict
 
 
@@ -221,9 +244,16 @@ class Board():
 
         while not correct_guess:
 
-            # choose word
-            word = random.choice(cp_dict)
-            counter += 1
+            invalid_guess = True
+
+            while invalid_guess:
+                # choose word
+                word = random.choice(cp_dict)
+                
+                if len(word) == NWORDLEN:
+                    if word in DICTION:
+                        counter += 1
+                        invalid_guess = False
 
             # add word to board
             self.update_board(word, counter)
