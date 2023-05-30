@@ -24,15 +24,6 @@ Need to keep track of
         - remove letter from choices within current col
     if letter in word and current position (green)
         - Choices for current col = letter
-
-Need to figure out:
-    - should above be in a new class, added to class Board, or not a class at all?
-    - where should choices for each column be stored
-
-Target word
-    - should be random word from text file
-    - where should this be stored?
-    - how to keep track across files?
 """
 
 
@@ -88,8 +79,6 @@ class Board():
 
     def update_choices(self, pos, letter, color):
 
-        print(f'Entering update_choices()')
-        
         updated_choices = ''
         up_letter = letter.upper()
         #print(f'letter in question: {up_letter}')
@@ -137,7 +126,6 @@ class Board():
             print(f'updated options:')
             self.print_choices()
         
-        print(f'Exiting update_choices()')
 
     
     def update_board(self, guess, counter):
@@ -204,8 +192,8 @@ class Board():
                     # update options
                     self.update_choices(i, glet, 'grey')
 
+        self.print_board() 
         self.print_choices()
-        self.print_board()
 
 
     def update_cpdict(self, cp_dict):
@@ -222,13 +210,18 @@ class Board():
 
                 # if word contains a grey letter, discard
                 if any([x in word for x in self.greys]):
-                    #print(f'discarding {word}')
                     cp_dict[i] = ''
-                    #print(f'cp_dict[i] = {cp_dict[i]}')
                 
-                # if word contains yellow letter in corresponding position, discard
                 for j in range(NWORDLEN):
+
+                    # if word contains yellow letter in corresponding position, discard
                     if any([x in word[j] for x in self.yellows[j]]):
+                        
+                        if not any([x in word[j] for x in self.greens[j]]):
+                            cp_dict[i] = ''
+                
+                    # if word does not contain green letter in corresponding position, discard
+                    if any([x not in word[j] for x in self.greens[j]]):
                         cp_dict[i] = ''
         
         new_cpdict = []

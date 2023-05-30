@@ -6,7 +6,7 @@ Control variations of the game Wordle
 import random
 
 # number of guesses
-NGUESSES = 5
+NGUESSES = 10
 
 # valid word length
 NWORDLEN = 5
