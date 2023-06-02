@@ -309,15 +309,3 @@ class Tile:
         return f'Tile(letter={self.letter}, color={self.color}, row={self.row}, col={self.col})'
 
 
-def main():
-    # checking if import works
-    #print(CHOICES, NGUESSES)
-    b = Board()
-    b.solve()
-    
-
-
-
-
-if __name__=="__main__":
-    main()

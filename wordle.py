@@ -15,6 +15,20 @@ def main():
 
     # print TARGET word for debugging purpose
     #print(f'Goal: {TARGET}')
+    while True:
+        game_mode = input("\nComputer Solve? (y/n): ")
+        
+        if not game_mode:
+            print('Exiting Program')
+            exit()
+        elif game_mode.lower() == 'y':
+            b.solve()
+            return
+        elif game_mode.lower() == 'n':
+            break
+        else:
+            print('\ninvalid input')
+    
 
     # initializing trackers for length of game
     correct_guess = False
@@ -33,12 +47,14 @@ def main():
             guess = input("\nguess a word: ")
             guess = guess.lower()
             #print(f'word guessed: {guess}')
-
-
+    
+            if not guess:
+                print('Exiting Program')
+                exit()
             # check if guess valid
             # check if guess is correct length
             if len(guess) == NWORDLEN:
-
+    
                 # check if guess within dictionary
                 if guess in DICTION:
                     invalid_guess = False
@@ -68,7 +84,6 @@ def main():
             print(f'\nOut of guesses. The word was {TARGET}')
             break
             
-
 
 if __name__=="__main__":
     main()
