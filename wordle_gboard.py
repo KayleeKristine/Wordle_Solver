@@ -49,16 +49,19 @@ class Board():
 
     def print_board(self):
         
-        print(f'*** Wordle Game Board ***')
+        print(f'\n*** Wordle Game Board ***')
         
         for row in self.tiles:
             #letters = [tile.letter for tile in row]
             values = ""
             for tile in row:
                 #print(f'{tile.letter}')
-                values = values + tile.letter.upper() + ': ' + tile.color + ' '
+                values = values + tile.letter.upper().ljust(1, ' ') + ': ' + tile.color.ljust(8, ' ')
 
             print(f'{values}')
+
+        self.print_colors()
+
 
     def set_tile(self, row_num, col_num, letter, color):
         # fill row with letters from inputed word in indicated row number
@@ -71,10 +74,21 @@ class Board():
         # print out possible choices for letters of each position of word
         print("\n*** Possible Letters for Each Position ***")
         for i in range(NWORDLEN):
-            print(self.choices[i])
+            print(f'{i+1} : {self.choices[i]}')
 
+
+    def print_colors(self):
+        # print out color list of letter
+
+        print("\n*** Green Letters ***")
+        print(self.greens)
+        
         print("\n*** Yellow Letters ***")
         print(self.yellows)
+        
+        
+        print("\n*** Grey Letters ***")
+        print(self.greys)
 
 
     def update_choices(self, pos, letter, color):
@@ -90,12 +104,12 @@ class Board():
 
             #print(f'previous options: {self.choices[pos]}')
             if up_letter in self.choices[pos]:
-                print(f'{letter.upper()} is within choices')
+                #print(f'{letter.upper()} is within choices')
 
                 updated_choices = self.choices[pos].replace(up_letter, '-')
                 
                 self.choices[pos] = updated_choices
-                print(f'updated choices to: {self.choices[pos]} ')
+                #print(f'updated choices to: {self.choices[pos]} ')
         
         # letter in word and correct position
         # only choice is the letter
@@ -106,7 +120,7 @@ class Board():
             #print(f'previous options: {self.choices[pos]}')
             self.choices[pos] = up_letter
 
-            print(f'updated choices to: {self.choices[pos]} ')
+            #print(f'updated choices to: {self.choices[pos]} ')
 
         
         # letter no within word
@@ -123,8 +137,8 @@ class Board():
                     updated_choices = self.choices[i].replace(up_letter, '-')
                     self.choices[i] = updated_choices
 
-            print(f'updated options:')
-            self.print_choices()
+            #print(f'updated options:')
+            #self.print_choices()
         
 
     
@@ -134,18 +148,19 @@ class Board():
         for i in range(NWORDLEN):
             #print(f'{guess[i]}')
             glet = guess[i]
-            print(f'\nProcessing - {glet} - position: {i}')
+            #print(f'\nProcessing - {glet} - position: {i}')
 
             for j in range(NWORDLEN):
                 #print(f'{target[j]}')
-                print(f'comparing with - {TARGET[j]} - position: {j}')
+                #print(f'comparing with - {TARGET[j]} - position: {j}')
                 
                 # if letter in correct position and within target
                 if i == j and glet is TARGET[j]:
-                    print(f'letter and position match')
+                    #print(f'letter and position match')
 
                     # color green
-                    self.greens[i].append(glet)
+                    if glet not in self.greens[i]:
+                        self.greens[i].append(glet)
 
                     # Set Tile
                     self.set_tile(counter - 1, i, glet, 'green')
@@ -155,7 +170,7 @@ class Board():
             
                 # if letter in target but incorrect position
                 if i != j and glet is TARGET[j]:
-                    print(f'letter match, position incorrect')
+                    #print(f'letter match, position incorrect')
                     
                     # If glet is in green, already know where the correct position is 
                     if glet not in self.greens[i]:
@@ -176,11 +191,11 @@ class Board():
 
 
             # if letter not within word
-            print(f'Checking if grey by default')
+            #print(f'Checking if grey by default')
             if glet not in self.greens[i]:
-                print(f'not within greens in position {i}')
+                #print(f'not within greens in position {i}')
                 if glet not in self.yellows[i]:
-                    print(f'not within yellows in position {i}')
+                    #print(f'not within yellows in position {i}')
 
                     # color grey
                     if glet not in self.greys:
@@ -198,10 +213,10 @@ class Board():
 
     def update_cpdict(self, cp_dict):
 
-        print(f'{self.greys}')
+        #print(f'{self.greys}')
         
         dict_length = len(cp_dict)
-        print(f'length of cp_dict = {dict_length}')
+        #print(f'length of cp_dict = {dict_length}')
         
         for i in range(dict_length):
             word = cp_dict[i]
@@ -229,8 +244,8 @@ class Board():
             if len(cp_dict[i]) != 0:
                 new_cpdict.append(cp_dict[i])
                 
-        print(new_cpdict)
-        print(f'length of update dictionary = {len(new_cpdict)}')
+        #print(new_cpdict)
+        #print(f'length of update dictionary = {len(new_cpdict)}')
         return new_cpdict
 
 
@@ -254,6 +269,8 @@ class Board():
                     if word in DICTION:
                         counter += 1
                         invalid_guess = False
+            
+            print(f'\nguess a word: {word}')
 
             # add word to board
             self.update_board(word, counter)
@@ -264,25 +281,24 @@ class Board():
 
             # repeat until guessed or reached max guesses
             if word == TARGET:
-                print(f'You Win!\nFound target in {counter} guess')
+                print(f'\nYou Win!\nFound target in {counter} guess')
                 correct_guess = True
 
             if counter == NGUESSES:
-                print(f'Out of guesses. The word was {TARGET}')
+                print(f'\nOut of guesses. The word was {TARGET}')
                 break
-
 
 
 
 class Tile:
 
-    def __init__(self, row: int, col: int, letter='.', color='grey'):
+    def __init__(self, row: int, col: int, letter='', color=''):
         self.row = row
         self.col = col
         self.letter = letter
         self.color = color
 
-    def set_value(self, l='.' , c='grey'):
+    def set_value(self, l='' , c=''):
         self.color = c
         self.letter = l
 

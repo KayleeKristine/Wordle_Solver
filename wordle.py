@@ -14,7 +14,7 @@ def main():
     #b.print_choices()
 
     # print TARGET word for debugging purpose
-    print(f'Goal: {TARGET}')
+    #print(f'Goal: {TARGET}')
 
     # initializing trackers for length of game
     correct_guess = False
@@ -30,9 +30,9 @@ def main():
         while invalid_guess:
 
             # ask user for guess
-            guess = input("guess a word: ")
+            guess = input("\nguess a word: ")
             guess = guess.lower()
-            print(f'word guessed: {guess}')
+            #print(f'word guessed: {guess}')
 
 
             # check if guess valid
@@ -53,19 +53,19 @@ def main():
         b.update_board(guess, counter)
         
         # display options
-        b.print_choices() 
+        #b.print_choices() 
         
         # display board
         b.print_board()
 
         # if the guess is the same as target word
         if guess == TARGET:
-            print(f'You Win!\nFound target in {counter} guesses')
+            print(f'\nYou Win!\nFound target in {counter} guesses')
             correct_guess = True
 
         # if reached max guesses
         if counter == NGUESSES:
-            print(f'Out of guesses. The word was {TARGET}')
+            print(f'\nOut of guesses. The word was {TARGET}')
             break
             
 
