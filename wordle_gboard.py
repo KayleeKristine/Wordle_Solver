@@ -5,11 +5,11 @@ A Wordle board holds a matrix of tiles.
 
 import random
 
-# Size of Puzzle
+# Size of Puzzle and Target word
 from wordle_config import NGUESSES, NWORDLEN, TARGET 
 
-# Choices is the alphabet, unknown for a tile without a letter is '.'
-from wordle_config import CHOICES, UNKNOWN, DICTION
+# Choices is the alphabet, Diction is a list of valid words
+from wordle_config import CHOICES, DICTION
 
 
 
@@ -71,14 +71,15 @@ class Board():
 
 
     def print_choices(self):
-        # print out possible choices for letters of each position of word
+        """ Displays possible choices for letters of each position of word """
+
         print("\n*** Possible Letters for Each Position ***")
         for i in range(NWORDLEN):
             print(f'{i+1} : {self.choices[i]}')
 
 
     def print_colors(self):
-        # print out color list of letter
+        """ Displays color lists """
 
         print("\n*** Green Letters ***")
         print(self.greens)
@@ -92,6 +93,7 @@ class Board():
 
 
     def update_choices(self, pos, letter, color):
+        """ Eliminates characters from possible letters for each position in word """
 
         updated_choices = ''
         up_letter = letter.upper()
@@ -143,6 +145,7 @@ class Board():
 
     
     def update_board(self, guess, counter):
+        """ Processes inputted guess word by determining color of tile and placing on board"""
 
         # find corresponding colors
         for i in range(NWORDLEN):
@@ -158,7 +161,7 @@ class Board():
                 if i == j and glet is TARGET[j]:
                     #print(f'letter and position match')
 
-                    # color green
+                    # add to list of green letters
                     if glet not in self.greens[i]:
                         self.greens[i].append(glet)
 
@@ -175,11 +178,10 @@ class Board():
                     # If glet is in green, already know where the correct position is 
                     if glet not in self.greens[i]:
                         
-                        
                         # If already in yellow, no need to update
                         if glet not in self.yellows[i]:
                             
-                            # color yellow
+                            # add to list of yellow letters
                             self.yellows[i].append(glet)
                             
                             # Update options
@@ -197,7 +199,7 @@ class Board():
                 if glet not in self.yellows[i]:
                     #print(f'not within yellows in position {i}')
 
-                    # color grey
+                    # add to list of grey letters
                     if glet not in self.greys:
                         self.greys.append(glet)
         
@@ -207,11 +209,13 @@ class Board():
                     # update options
                     self.update_choices(i, glet, 'grey')
 
+        # Display board and updated choices
         self.print_board() 
         self.print_choices()
 
 
     def update_cpdict(self, cp_dict):
+        """ Eliminates words from possible answers """
 
         #print(f'{self.greys}')
         
@@ -250,6 +254,7 @@ class Board():
 
 
     def solve(self):
+        """ solves the wordle through process of elimination """
         # copy dictionary
         cp_dict = DICTION
 
@@ -284,7 +289,7 @@ class Board():
                 print(f'\nYou Win!\nFound target in {counter} guess')
                 correct_guess = True
 
-            if counter == NGUESSES:
+            elif counter == NGUESSES:
                 print(f'\nOut of guesses. The word was {TARGET}')
                 break
 

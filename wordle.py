@@ -23,7 +23,7 @@ def main():
             exit()
         elif game_mode.lower() == 'y':
             b.solve()
-            return
+            exit()
         elif game_mode.lower() == 'n':
             break
         else:
