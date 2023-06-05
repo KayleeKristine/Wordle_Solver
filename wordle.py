@@ -44,7 +44,7 @@ def main():
         while invalid_guess:
 
             # ask user for guess
-            guess = input("\nguess a word: ")
+            guess = input("\nguess a word (enter to exit): ")
             guess = guess.lower()
             #print(f'word guessed: {guess}')
     
